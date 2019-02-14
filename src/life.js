@@ -25,35 +25,39 @@ Cell.prototype.change = function(){
 
 function checkNeighbors(cell, grid)
 {
-    let arr = [];
-    let livingNeighbors = 0;
-    let radius = 1;
-    let dist = radius*2 + 1;
-    let negDist = -radius;
-    let negRow;
+    let arr = [];//for debugging
+    let livingNeighbors = 0; //returned
+    let radius = 1; //distance around which we search
+    let dist = radius*2 + 1; //"width" of block to search
+    // let negDist = -radius;
+    let negRow = -radius;
     let negCol;
     for(let x = 0; x<dist; x++)
     {
-        negRow = negDist;
         negCol = -radius;
         for(let y = 0; y<dist; y++)
         {
             let row = negRow + cell.x/32;
             let col = negCol + cell.y/32;
+
             if(row<width && row >=0 && col<height && col>=0)//only adding valid board locations
             {
-                if(cell.x/32 === row && cell.y/32 === col)
-                continue;
-                
-                arr.push(grid[col][row]);
-                if(grid[col][row].isAlive)
+            // debugger;
+
+                if(negRow == 0 && negCol == 0)
+                {
+                    negCol++;
+                    continue;
+                }
+                arr.push(grid[row][col]);
+                if(grid[row][col].isAlive)
                 {
                     livingNeighbors +=1;
                 }
             }
             negCol++;
         }
-        negDist++;
+        negRow++;
     }
     return livingNeighbors;
 }
@@ -82,6 +86,9 @@ function drawSquare(x,y, bool)
     ctx.rect(x, y, 32, 32)
     ctx.fillStyle = bool? 'white': 'red';
     ctx.fill();
+    // ctx.fillStyle = 'black';
+    // ctx.font = ('8px sans-serif')
+    // ctx.fillText(`(${x}, ${y}`,x,y)
     ctx.closePath();
 }
 
