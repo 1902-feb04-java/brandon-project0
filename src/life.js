@@ -12,17 +12,28 @@
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 const width = 32, height = 32;
-
+canvas.addEventListener('click',(e)=>{
+    let mouseLoc = {
+        x : e.clientX/width,
+        y : e.clientY/height
+    }
+    console.log(mouseLoc);
+    // convert from canvas - window
+    getCellByLocation(mouseLoc).nextState = true;
+})
 function Cell(xPos, yPos, alive)
 {
     this.x = xPos;
     this.y = yPos;
     this.isAlive = alive;
     this.nextState = false;
+    this.change = function(){
+        this.isAlive = this.nextState;
+    }
 }
-Cell.prototype.change = function(){
-    this.isAlive = this.nextState;
-}
+// Cell.prototype.change = function(){
+//     this.isAlive = this.nextState;
+// }
 
 function checkNeighbors(cell, grid)
 {
@@ -38,8 +49,8 @@ function checkNeighbors(cell, grid)
         negCol = -radius; //reset for each row
         for(let y = 0; y<dist; y++)
         {
-            let row = negRow + cell.x/32; 
-            let col = negCol + cell.y/32;
+            let row = negRow + cell.x/width; 
+            let col = negCol + cell.y/height;
 
             if(row<width && row >=0 && col<height && col>=0)//only adding valid board locations
             {
@@ -63,7 +74,19 @@ function checkNeighbors(cell, grid)
     return livingNeighbors;
 }
 
-const board = (function(){
+function getCellByLocation(vector)
+{
+    let x = Math.round(vector.x);//we use a unit size of 1, elsewise multiply by size
+    let y = Math.round(vector.y);
+    if(board!=null && board[x][y]!=null)
+    return board[x][y];
+    else return null;
+}
+
+const board = createBoard();
+
+function createBoard()
+{
     let newBoard = [[],[]];
     for (let x = 0; x < width; x++)
     {
@@ -78,7 +101,7 @@ const board = (function(){
         }
     }
     return newBoard;
-})();
+}
 
 function drawSquare(x,y, bool)
 {
