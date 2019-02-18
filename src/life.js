@@ -13,9 +13,10 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 const width = 32, height = 32;
 canvas.addEventListener('click',(e)=>{
+    let rect = canvas.getBoundingClientRect();
     let mouseLoc = {
-        x : e.clientX/width,
-        y : e.clientY/height
+        x : Math.floor((e.clientX - rect.left)/width),
+        y : Math.floor((e.clientY - rect.top)/height)
     }
     console.log(mouseLoc);
     // convert from canvas - window
@@ -31,9 +32,6 @@ function Cell(xPos, yPos, alive)
         this.isAlive = this.nextState;
     }
 }
-// Cell.prototype.change = function(){
-//     this.isAlive = this.nextState;
-// }
 
 function checkNeighbors(cell, grid)
 {
