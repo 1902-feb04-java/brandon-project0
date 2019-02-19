@@ -14,12 +14,22 @@ const ctx = canvas.getContext('2d');
 const boardWidth = 80, boardHeight = 60;
 const cellWidth = 8, cellHeight = 8;
 
-canvas.addEventListener('click',(e)=>{
+canvas.addEventListener('mousedown', (e)=>{
     let rect = canvas.getBoundingClientRect();
-    let mouseLoc = {
+    let mouseLoc = 
+    {
         x : Math.floor((e.clientX - rect.left)/cellWidth),
         y : Math.floor((e.clientY - rect.top)/cellHeight)
     }
+    canvas.addEventListener('mousemove', (e) => {
+        if(e.buttons == 0)
+        {
+            mouseLoc.x = Math.floor((e.clientX - rect.left)/cellWidth);
+            mouseLoc.y = Math.floor((e.clientY - rect.top)/cellHeight);
+            getCellByLocation(mouseLoc).nextState = true;
+        }
+    })
+
     console.log(mouseLoc);
     // convert from canvas - window
     let c = getCellByLocation(mouseLoc);
