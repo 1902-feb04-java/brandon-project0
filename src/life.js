@@ -14,6 +14,20 @@ const ctx = canvas.getContext('2d');
 const boardWidth = 80, boardHeight = 60;
 const cellWidth = 8, cellHeight = 8;
 
+var patternSelector = document.getElementById("pattern-select");
+let currentPattern = patternSelector.value;;
+patternSelector.addEventListener('change', ()=>{
+    // console.log(patternSelector.value)
+    currentPattern = patternSelector.value;
+});
+
+const patterns = {
+    dotPattern : [{x:0, y:0}],
+    starPattern : [{x:0, y:0} ,{x:1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:-1}],
+    gliderPattern : [{x:0, y:0}, {x:-1, y:0}, {x:-2, y:-1}, {x:0, y:-1}, {x:0, y:-2}],
+    pulsarPattern : [{x:0, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:-1}, {x:1, y:1}, {x:1, y:-1}, {x:2, y:0},]
+};
+
 canvas.addEventListener('mousedown', (e)=>{
     let rect = canvas.getBoundingClientRect();
     let mouseLoc = 
@@ -21,23 +35,20 @@ canvas.addEventListener('mousedown', (e)=>{
         x : Math.floor((e.clientX - rect.left)/cellWidth),
         y : Math.floor((e.clientY - rect.top)/cellHeight)
     }
+    
     canvas.addEventListener('mousemove', (e) => {
-        if(e.buttons == 0)
+        if(e.buttons == 1 && currentPattern == 'dotPattern')
         {
             mouseLoc.x = Math.floor((e.clientX - rect.left)/cellWidth);
             mouseLoc.y = Math.floor((e.clientY - rect.top)/cellHeight);
             getCellByLocation(mouseLoc).nextState = true;
         }
-    })
+    });
 
-    console.log(mouseLoc);
-    // convert from canvas - window
+    // console.log(mouseLoc);
     let c = getCellByLocation(mouseLoc);
-    const starPattern = [{x:0, y:0} ,{x:1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:-1}];
-    const gliderPattern = [{x:0, y:0}, {x:-1, y:0}, {x:-2, y:-1}, {x:0, y:-1}, {x:0, y:-2}]
-    matchPattern(c, gliderPattern);
-    // if(c != null)c.nextState = true;
-})
+    matchPattern(c, patterns[currentPattern]);
+});
 function Cell(xPos, yPos, alive)
 {
     this.x = xPos;//index in board array
