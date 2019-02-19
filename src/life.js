@@ -23,12 +23,15 @@ canvas.addEventListener('click',(e)=>{
     console.log(mouseLoc);
     // convert from canvas - window
     let c = getCellByLocation(mouseLoc);
-    if(c != null)c.nextState = true;
+    const starPattern = [{x:0, y:0} ,{x:1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:-1}];
+    const gliderPattern = [{x:0, y:0}, {x:-1, y:0}, {x:-2, y:-1}, {x:0, y:-1}, {x:0, y:-2}]
+    matchPattern(c, gliderPattern);
+    // if(c != null)c.nextState = true;
 })
 function Cell(xPos, yPos, alive)
 {
-    this.x = xPos;
-    this.y = yPos;
+    this.x = xPos;//index in board array
+    this.y = yPos;//index in board array
     this.isAlive = alive;
     this.nextState = false;
     this.change = function(){
@@ -46,11 +49,11 @@ function createBoard()
         newBoard[x] =[];
         for(let y = 0; y < boardHeight; y++)
         {
+            let alive = Math.random() > 0.8;
+            let c = new Cell(x, y, alive);
+            newBoard[x][y] = c;
             let xPosition = x*cellWidth;
             let yPosition = y*cellHeight;
-            let alive = Math.random() > 0.8;
-            let c = new Cell(xPosition, yPosition, alive);
-            newBoard[x][y] = c;
             drawSquare(xPosition, yPosition, c.isAlive);
             // console.log(newBoard[x][y]);
         }
@@ -65,6 +68,18 @@ function drawSquare(x,y, bool)
     ctx.fillStyle = bool? 'white': 'red';
     ctx.fill();
     ctx.closePath();
+}
+
+function matchPattern(centerCell, vectorArray)
+{
+    vectorArray.forEach(vector => {
+        let row = centerCell.x + vector.x; //expect vectorArray to use index values
+        let col = centerCell.y + vector.y;
+        if(row>=0 && row<boardWidth && col>=0 && col<boardHeight)
+        {
+            getCellByLocation({x:row,y:col}).nextState = true;
+        }
+    });
 }
 
 function checkNeighbors(cell, grid)
@@ -83,8 +98,8 @@ function checkNeighbors(cell, grid)
         negCol = -radius; //reset for each row
         for(let y = 0; y<dist; y++)
         {
-            row = negRow + cell.x/cellWidth; 
-            col = negCol + cell.y/cellHeight;
+            row = negRow + cell.x; 
+            col = negCol + cell.y;
 
             if(row<boardWidth && row >=0 && col<boardHeight && col>=0)//only adding valid board locations
             {
@@ -162,9 +177,9 @@ function tick()
         {
             let cell = board[x][y];
             cell.change();
-            drawSquare(cell.x,cell.y,cell.isAlive)
+            drawSquare(cell.x * cellWidth,cell.y * cellHeight,cell.isAlive)
         }
     }
 }
-setInterval(tick,1000);
+setInterval(tick,750);
 
