@@ -3,3 +3,31 @@ canvas{
     display: block;
     margin: 0 auto;
 }
+#explainer{
+    text-align: center;
+}
+
+#rules{
+    margin-top: 10px;
+    padding-left: 28%;
+    padding-right: 5px; 
+}
+li{
+    padding-top: 5px;
+}
+#rules, #explainer{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 18px;
+}
+#pattern-select{
+    position: relative;
+    margin: auto;
+    display: block;
+}
+#top{
+    left: 50%;
+}
+
+body{
+    background-color: lightgray;
+}

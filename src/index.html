@@ -9,15 +9,41 @@
 </head>
 <body>
     <canvas id="myCanvas" width="640" height="480"></canvas>
-    <!-- <input type="button" class="toggleButton" id="toggle_brush_state" value="Alive"> -->
-    <!-- select from list of pattern options -->
-    <select name="pattern" id="pattern-select">
+    
+<div id="top">
+    <p id="explainer">
+        Select any pattern and click on the canvas. 
+        Or draw using the single dot.
+    </p>
+    <select name="pattern" id="pattern-select" style="width:50px">
         <option value="dotPattern" selected>dot</option>
         <option value="gliderPattern">glider</option>
         <option value="starPattern">star</option>
         <option value="pulsarPattern">pulsar</option>
 
     </select>
+</div>
+    <div id="rules">
+    <p>
+        <h2>How it works.</h2>
+        <ol>
+            <li>
+            Any live cell with fewer than two live neighbors dies, as if by underpopulation.
+            </li>
+            <li>
+            Any live cell with two or three live neighbors lives on to the next generation.
+            </li>
+            <li>
+            Any live cell with more than three live neighbors dies, as if by overpopulation.
+            </li>
+            <li>
+            Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction. 
+            </li>
+
+        </ol>
+    </p>
+</div>
+
     <script src="life.js"></script>
     <script src="controls.js"></script>
 

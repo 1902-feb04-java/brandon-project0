@@ -5,7 +5,9 @@
     every tick - check neighbors, change state
 
     user brush - create patch of life or death
+    -- note: death doesn't make a lot of sense
     change state, change size
+    -- note: changing size is really a new pattern that needs to be created
 
 */
 'use strict';
@@ -22,8 +24,8 @@ patternSelector.addEventListener('change', ()=>{
 });
 
 const patterns = {
-    dotPattern : [{x:0, y:0}],
-    starPattern : [{x:0, y:0} ,{x:1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:-1}],
+    dotPattern :    [{x:0, y:0}],
+    starPattern :   [{x:0, y:0} ,{x:1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:-1}],
     gliderPattern : [{x:0, y:0}, {x:-1, y:0}, {x:-2, y:-1}, {x:0, y:-1}, {x:0, y:-2}],
     pulsarPattern : [{x:0, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:-1}, {x:1, y:1}, {x:1, y:-1}, {x:2, y:0},]
 };
@@ -70,7 +72,7 @@ function createBoard()
         newBoard[x] =[];
         for(let y = 0; y < boardHeight; y++)
         {
-            let alive = Math.random() > 0.8;
+            let alive = false//Math.random() > 0.8;
             let c = new Cell(x, y, alive);
             newBoard[x][y] = c;
             let xPosition = x*cellWidth;
